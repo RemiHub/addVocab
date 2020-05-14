@@ -1,0 +1,3 @@
+Have one tab to enter new word and save in a list - DONE
+have the other input field to add the meaning of the word -DONE
+both should save to database -

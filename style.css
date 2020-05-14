@@ -1,0 +1,51 @@
+body{
+    background: #134552c5;
+  }
+
+  .container{
+    max-width: 400px;
+  }
+
+  input[type=text],
+  input[type=text]:focus{
+    color: #fff;
+    border: none;
+    background: rgba(0,0,0,0.2);
+    max-width: 400px;
+  }
+
+  .todos li{
+    background: #01293b;
+    font-size: 1.2em;
+    /* #0a013d */
+  }
+
+  .show{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    border: none;
+    background: rgba(0,0,0,0.2);
+    color: #fff;
+    overflow: hidden;
+  }
+
+  .delete{
+    cursor: pointer;
+    color: rgb(248, 24, 68);
+    /* align-items: center; */
+  }
+
+  .delete:hover{
+      font-weight: 900;
+  }
+
+  .filtered{
+      display: none !important;
+  }
+
+  #no-words{
+      color: rgb(139, 11, 36);
+      text-align: center;
+  }
