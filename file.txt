@@ -1,3 +1,9 @@
 Have one tab to enter new word and save in a list - DONE
 have the other input field to add the meaning of the word -DONE
-both should save to database -
+both should save to database - DONE
+
+FINISHING TOUCHES:
+add favicon
+change name?
+upload to website and write about it
+

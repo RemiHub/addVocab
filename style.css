@@ -15,6 +15,7 @@ body{
   }
 
   .todos li{
+    /* color: #0d6dfdc7; */
     background: #01293b;
     font-size: 1.2em;
     /* #0a013d */
@@ -73,7 +74,7 @@ body{
     overflow: hidden;
     min-height: 120px;
     padding: 10px;
-    border-radius: 5px;
+    border-radius: 15px;
     margin-bottom: 35px;
   }
 /* 
@@ -89,7 +90,7 @@ body{
   padding: 20px 15px 50px 15px; 
   /* margin-bottom: 0; */
     margin-bottom: 10px;
-    border-radius: 5px;
+    border-radius: 15px;
   }
 
   .btn{
@@ -97,5 +98,29 @@ body{
     margin-bottom: 40px;
   }
 
+  .btn-out{
+    margin-bottom: 40px;
+    margin-top: 30px;
+    border: none;
+    font-weight: 600;
+    /* background-color: darkred; */
+  }
 
- 
+  .btn-out:hover{
+    background-color: rgb(236, 20, 20);
+  }
+
+  button{
+    padding: 5px;
+    border-radius: 5px;
+  }
+
+  /* button:hover{
+    background-color: darkred;
+  } */
+
+  
+
+
+  
+

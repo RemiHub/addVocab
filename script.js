@@ -2,15 +2,12 @@ const addForm = document.querySelector('.add');
 const list = document.querySelector('.todos'); //.todos found in ul tag
 const search = document.querySelector('.search input');
 const addWord = document.querySelector('.add input');
-const vocabList = document.querySelector('#vocab-list')
-const addVocabForm = document.querySelector('#add-form')
+const vocabList = document.querySelector('#vocab-list');
+const addVocabForm = document.querySelector('#add-form');
 
 
 
-
-//had class of span on the span tag but not needed
 //generates the data(todo) that is input by the user and displays on list
-
 const generateTemplate = todo => {
     const html = `
     <li class="list-group-item mb-1">
@@ -23,17 +20,30 @@ const generateTemplate = todo => {
     `;
 
     list.innerHTML += html;
-
-
-
 };
+
+const loggedInForm = document.querySelectorAll('#logged-in');
+
+
+//toggle form visability 
+const setupUI = (user) =>{
+    if (user){
+        // console.log(loggedInForm)
+        loggedInForm.forEach(item => item.style.display = 'block');
+        
+    } else {
+        loggedInForm.forEach(item => item.style.display = 'none');
+    }
+}
 
 
 
 
 
 function renderWords(doc){
-
+    // if(doc.length) {
+    //     console.log('has data')
+    
     let li = document.createElement('li');
     let word = document.createElement('span');
     let definition = document.createElement('textarea'); 
@@ -46,10 +56,23 @@ function renderWords(doc){
     li.setAttribute('data-id', doc.id);
     word.textContent = doc.data().word;
     definition.textContent = doc.data().definition;
-    bin.textContent = 'DELETE';
-    bin.style.backgroundColor = 'red';
+    bin.textContent = 'Delete';
+    bin.style.backgroundColor = 'rgb(236, 20, 20)';
     bin.style.color = 'white';
     bin.style.fontWeight = '600';
+    bin.style.border = '2px solid';
+
+
+    bin.addEventListener('mouseover', e => {
+        bin.style.backgroundColor = 'darkred';
+    });
+
+    bin.addEventListener('mouseout', e => {
+        bin.style.backgroundColor = 'rgb(236, 20, 20)';
+        // bin.style.border = 'block';
+    });
+
+    
     
     // bin.innerHTML = `<i class="far fa-trash-alt delete mt-3" ></i>`;            
 
@@ -77,15 +100,111 @@ function renderWords(doc){
         let id = e.target.parentElement.getAttribute('data-id');
         db.collection('Vocab').doc(id).delete();
     })
+    // } else {
+    //     // alert('Login to view');
+    // }
 }
 
 
-db.collection('Vocab').get().then((snapshot) => {
-    snapshot.docs.forEach(doc =>{
-        renderWords(doc);
-        //grabs the data from the database
-    })
+
+
+//listen to auth status changes
+auth.onAuthStateChanged(user => {
+
+    if (user){
+        db.collection('Vocab').onSnapshot((snapshot) => { //grabs the data from the database
+            snapshot.docs.forEach(doc =>{
+                // console.log(doc);
+                renderWords(doc);
+                setupUI(user);
+
+            });
+        }, (error) => {
+            // unsub();
+            setupUI();
+            console.log('Permission error, you must be logged in, please check your username and password and try again.');
+        });
+        
+    } else {
+        // unsub();
+
+        setupUI();
+        console.log('user is logged out');
+        changeLogoutToLogin();
+
+        //renderWords([]); // causing error but works without?
+    }
 });
+
+// const unsub = db.collection('Vocab').onSnapshot(function(querySnapshot){
+//     console.log(querySnapshot);
+// });
+
+// // ...
+
+// // Stop listening for changes
+// unsub();
+
+
+const loggedOutBtn = document.querySelector('#logout-btn');
+
+//go to login page when logout button is clicked
+function toggleLoginOut(){
+    
+loggedOutBtn.addEventListener('click', e => {
+    location.href = 'login.html';
+})
+}
+toggleLoginOut();
+
+
+
+
+
+
+
+
+
+//unneeded login toggle function??
+//change style of login button to logout button
+function changeLogoutToLogin(){
+
+    let changeBtn = loggedOutBtn;
+
+    changeBtn.style.backgroundColor = '#0d6efd';
+    changeBtn.style.color = 'white';
+    changeBtn.innerHTML = 'Login';
+    changeBtn.style.border = 'none';
+    changeBtn.style.fontWeight = '600';
+
+    
+    changeBtn.addEventListener('click', e => {
+        // console.log(e)
+        location.href = 'login.html'; //link back to login page
+     });
+
+
+     changeBtn.addEventListener('mouseover', e => {
+         changeBtn.style.backgroundColor = '#0d6dfdc7';
+     });
+
+     changeBtn.addEventListener('mouseout', e => {
+         changeBtn.style.backgroundColor = '#0d6efd';
+     });
+
+}
+
+
+
+
+
+// db.collection('Vocab').get().then((snapshot) => {
+//     snapshot.docs.forEach(doc =>{
+//         renderWords(doc);
+//         //grabs the data from the database
+//     })
+// });     !!!!!!grabs the data
+
 
 
 //disable button until both input fields are filled out
@@ -131,6 +250,8 @@ addVocabForm.addEventListener('submit', e => {
 });
 
 db.collection('Vocab').doc()
+
+
 
 
 
@@ -298,3 +419,14 @@ search.addEventListener('keyup', () => {
 
 
 //if there is a duplicate then dont submit OR allow duplicates?
+
+
+//logout button
+const logout = document.querySelector('#logout-btn');
+logout.addEventListener('click', e => {
+    e.preventDefault();
+    auth.signOut();
+    // .then(() => {
+    //     console.log('User has logged out');
+    // })
+});

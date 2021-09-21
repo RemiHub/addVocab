@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <!-- <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script> was shooting off an error?-->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="login-style.css">
+
+</head>
+
+
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.15.1/jquery.validate.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Kaushan+Script" rel="stylesheet">
+      <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+<body>
+    <div class="container">
+        <div class="row">
+			<div class="col-md-5 mx-auto">
+			<div id="first">
+				<div class="myform form">
+					 <div class="logo mb-3">
+						 <div class="col-md-12 text-center">
+							<h1>Login</h1>
+						 </div>
+					</div>
+                   <form action="" method="post" name="login" id="login-form">
+                           <div class="form-group">
+                              <label for="exampleInputEmail1">Email address</label>
+                              <input type="email" name="login-email"  class="form-control" id="login-email" aria-describedby="emailHelp" placeholder="Enter email">
+                           </div>
+                           <div class="form-group">
+                              <label for="exampleInputEmail1">Password</label>
+                              <input type="password" name="login-password" id="login-password"  class="form-control" aria-describedby="emailHelp" placeholder="Enter Password">
+                           </div>
+                           <div class="form-group">
+                              <p class="text-center">By signing up you accept our <a href="#">Terms Of Use</a></p>
+                           </div>
+                           <div class="col-md-12 text-center ">
+                              <button id="login-btn" type="submit" class=" btn btn-block mybtn btn-primary tx-tfm">Login</button>
+                           </div>
+                           <div class="col-md-12 ">
+                              <div class="login-or">
+                                 <hr class="hr-or">
+                                 <span class="span-or">or</span>
+                              </div>
+                           </div>
+                           <div class="col-md-12 mb-3">
+                              <p class="text-center">
+                                 <a href="javascript:void();" class="google btn mybtn"><i class="fa fa-google-plus">
+                                 </i> Signup using Google
+                                 </a>
+                              </p>
+                           </div>
+                           <div class="form-group">
+                              <p class="text-center">Don't have account? <a href="#" id="signup">Sign up here</a></p>
+                           </div>
+                        </form>
+                 
+				</div>
+			</div>
+			  <div id="second">
+			      <div class="myform form">
+                        <div class="logo mb-3">
+                           <div class="col-md-12 text-center">
+                              <h1 >Signup</h1>
+                           </div>
+                        </div>
+                        <form action="#" name="registration" id="register-form">
+                           <div class="form-group">
+                              <label for="exampleInputEmail1">First Name</label>
+                              <input type="text"  name="firstname" class="form-control" id="firstname" aria-describedby="emailHelp" placeholder="Enter Firstname">
+                           </div>
+                           <div class="form-group">
+                              <label for="exampleInputEmail1">Last Name</label>
+                              <input type="text"  name="lastname" class="form-control" id="lastname" aria-describedby="emailHelp" placeholder="Enter Lastname">
+                           </div>
+                           <div class="form-group">
+                              <label for="exampleInputEmail1">Email address *</label>
+                              <input type="email" name="reg-email"  class="form-control" id="reg-email" aria-describedby="emailHelp" placeholder="Enter email" required>
+                           </div>
+                           <div class="form-group">
+                              <label for="exampleInputEmail1">Password *</label>
+                              <input type="password" name="reg-password" id="reg-password"  class="form-control" aria-describedby="emailHelp" placeholder="Enter Password" required>
+                           </div>
+                           <div class="col-md-12 text-center mb-3">
+                              <button type="submit" class=" btn btn-block mybtn btn-primary tx-tfm">Get Started For Free</button>
+                           </div>
+                           <div class="col-md-12 ">
+                              <div class="form-group">
+                                 <p class="text-center"><a href="#" id="signin">Already have an account?</a></p>
+                              </div>
+                           </div>
+                            </div>
+                        </form>
+                     </div>
+			</div>
+		</div>
+      </div>   
+      <div class="login-explain">Have trouble remembering NEW words? 
+          <br> Can't remember what those new words mean?
+          <br> This is the app for you, log in, increase your vocabulary and never forget another new word.
+          <br> 
+        
+        </div>
+
+
+
+        <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+        <!-- TODO: Add SDKs for Firebase products that you want to use
+            https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-analytics.js"></script>
+
+
+
+    <script>
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        var firebaseConfig = {
+            apiKey: "AIzaSyCEeTDYp-uFCEH-byfn4ihDXwr0cYuIGDk",
+            authDomain: "new-vocabs.firebaseapp.com",
+            projectId: "new-vocabs",
+            storageBucket: "new-vocabs.appspot.com",
+            messagingSenderId: "666974238175",
+            appId: "1:666974238175:web:113af6e77be69d1802806a",
+            measurementId: "G-KX89KFJ7Y8"
+        };
+
+        
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        db.settings({ timestampsInSnapshots: true }) //gets rid of warnings in console
+        //make auth
+        const auth = firebase.auth();
+        firebase.analytics();
+    </script>
+    
+
+        
+<script src="login.js"></script>
+<script src="auth.js"></script>
+<script src="index.js"></script>
+<!-- <script src="script.js"></script> -->
+
+         
+</body>
+</html>
+
