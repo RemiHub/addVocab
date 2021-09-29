@@ -92,7 +92,7 @@ $("#signup").click(function() {
         },
       
         submitHandler: function(form) {
-          form.submit();
+          // form.submit();
         // form.close();
 
         form.reset();

@@ -46,14 +46,15 @@
                            <div class="col-md-12 ">
                               <div class="login-or">
                                  <hr class="hr-or">
-                                 <span class="span-or">or</span>
+                                 <!-- commented out as Google login not finalised yet - todo  -->
+                                 <!-- <span class="span-or">or</span> -->
                               </div>
                            </div>
                            <div class="col-md-12 mb-3">
                               <p class="text-center">
-                                 <a href="javascript:void();" class="google btn mybtn"><i class="fa fa-google-plus">
+                                 <!-- <a href="javascript:void();" class="google btn mybtn"><i class="fa fa-google-plus">
                                  </i> Signup using Google
-                                 </a>
+                                 </a> -->
                               </p>
                            </div>
                            <div class="form-group">
@@ -72,6 +73,7 @@
                         </div>
                         <form action="#" name="registration" id="register-form">
                            <div class="form-group">
+                              <!-- get rid of name and last name -->
                               <label for="exampleInputEmail1">First Name</label>
                               <input type="text"  name="firstname" class="form-control" id="firstname" aria-describedby="emailHelp" placeholder="Enter Firstname">
                            </div>
@@ -88,11 +90,11 @@
                               <input type="password" name="reg-password" id="reg-password"  class="form-control" aria-describedby="emailHelp" placeholder="Enter Password" required>
                            </div>
                            <div class="col-md-12 text-center mb-3">
-                              <button type="submit" class=" btn btn-block mybtn btn-primary tx-tfm">Get Started For Free</button>
+                              <button id="register-btn" type="submit" class=" btn btn-block mybtn btn-primary tx-tfm">Get Started For Free</button>
                            </div>
                            <div class="col-md-12 ">
                               <div class="form-group">
-                                 <p class="text-center"><a href="#" id="signin">Already have an account?</a></p>
+                                 <p class="text-center"><a href="login.html" id="signin">Already have an account?</a></p>
                               </div>
                            </div>
                             </div>

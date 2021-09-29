@@ -4,6 +4,7 @@ const search = document.querySelector('.search input');
 const addWord = document.querySelector('.add input');
 const vocabList = document.querySelector('#vocab-list');
 const addVocabForm = document.querySelector('#add-form');
+const accDetails = document.querySelector('.account-details');
 
 
 
@@ -25,21 +26,27 @@ const generateTemplate = todo => {
 const loggedInForm = document.querySelectorAll('#logged-in');
 
 
+
 //toggle form visability 
 const setupUI = (user) =>{
     if (user){
-        // console.log(loggedInForm)
+        //account info
+        const userDetails = `<div>Logged in as ${user.email}, welcome!</div>`;
+        accDetails.innerHTML = userDetails;
         loggedInForm.forEach(item => item.style.display = 'block');
         
     } else {
+        //hide account details
+        userDetails.innerHTML = '';
         loggedInForm.forEach(item => item.style.display = 'none');
+
     }
 }
 
 
 
 
-
+//make words and definition appear once submitted
 function renderWords(doc){
     // if(doc.length) {
     //     console.log('has data')
@@ -162,11 +169,7 @@ toggleLoginOut();
 
 
 
-
-
-
-//unneeded login toggle function??
-//change style of login button to logout button
+//change style of login button to logout button when user logs out
 function changeLogoutToLogin(){
 
     let changeBtn = loggedOutBtn;
@@ -254,7 +257,7 @@ db.collection('Vocab').doc()
 
 
 
-
+//submit word in local storage - not needed
 function submitStorage(){
 //event listener on submit of input from user
 addForm.addEventListener('submit', e => {
@@ -291,7 +294,7 @@ addForm.addEventListener('submit', e => {
 submitStorage();
 
 
-
+//if database is empty set error message 
 function checkDatabaseEmpty(){
     
 db.collection('Vocab').get().then((snapshot) => {
@@ -308,6 +311,7 @@ db.collection('Vocab').get().then((snapshot) => {
 }
 
 checkDatabaseEmpty();
+
 
 
 
