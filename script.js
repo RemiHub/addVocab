@@ -32,12 +32,12 @@ const setupUI = (user) =>{
     if (user){
         //account info
         const userDetails = `<div>Logged in as ${user.email}, welcome!</div>`;
-        accDetails.innerHTML = userDetails;
-        loggedInForm.forEach(item => item.style.display = 'block');
+        accDetails.innerHTML = userDetails; //log email to new div
+        loggedInForm.forEach(item => item.style.display = 'block'); 
         
     } else {
         //hide account details
-        userDetails.innerHTML = '';
+        accDetails.innerHTML = '';
         loggedInForm.forEach(item => item.style.display = 'none');
 
     }
@@ -48,8 +48,6 @@ const setupUI = (user) =>{
 
 //make words and definition appear once submitted
 function renderWords(doc){
-    // if(doc.length) {
-    //     console.log('has data')
     
     let li = document.createElement('li');
     let word = document.createElement('span');
@@ -61,9 +59,10 @@ function renderWords(doc){
 
 
     li.setAttribute('data-id', doc.id);
-    word.textContent = doc.data().word;
+    word.textContent = doc.data().word.toUpperCase();
     definition.textContent = doc.data().definition;
-    bin.textContent = 'Delete';
+
+    bin.textContent = 'DELETE';
     bin.style.backgroundColor = 'rgb(236, 20, 20)';
     bin.style.color = 'white';
     bin.style.fontWeight = '600';
@@ -105,12 +104,21 @@ function renderWords(doc){
         e.stopPropagation();
         //get the unique id from the db
         let id = e.target.parentElement.getAttribute('data-id');
-        db.collection('Vocab').doc(id).delete();
+        console.log(id);
+        db.collection('personal').doc(id).delete();
+        console.log(id);
+        // var docRef = 
+        // docRef.doc(id);
     })
     // } else {
     //     // alert('Login to view');
     // }
 }
+
+
+//add onAuthStateChanged with unique user id - that collects the data in the users db?
+//does render words need to be in new function?
+//where else does collection happen that takes from Vocab db?
 
 
 
@@ -119,7 +127,7 @@ function renderWords(doc){
 auth.onAuthStateChanged(user => {
 
     if (user){
-        db.collection('Vocab').onSnapshot((snapshot) => { //grabs the data from the database
+        db.collection('users').doc(user.uid).collection('personal').onSnapshot((snapshot) => { //grabs the data from the database
             snapshot.docs.forEach(doc =>{
                 // console.log(doc);
                 renderWords(doc);
@@ -129,7 +137,7 @@ auth.onAuthStateChanged(user => {
         }, (error) => {
             // unsub();
             setupUI();
-            console.log('Permission error, you must be logged in, please check your username and password and try again.');
+            console.log('Permission error, you must be logged in, please check your username and password and try again.' + error);
         });
         
     } else {
@@ -221,6 +229,7 @@ input2.addEventListener('change', stateHandle);
 input.addEventListener("change", stateHandle);
 
 
+//toggle button availability
 function stateHandle() {
     if (document.querySelector('.input').value === "" ) {
 
@@ -242,7 +251,7 @@ addVocabForm.addEventListener('submit', e => {
     e.preventDefault();
     // console.log(definition);
 
-    db.collection('Vocab').add({
+    db.collection('users').add({ //was using Vocab collection before
         word: addVocabForm.add.value,
         definition: addVocabForm.defined.value
     });
@@ -252,7 +261,37 @@ addVocabForm.addEventListener('submit', e => {
     addVocabForm.defined.value = '';
 });
 
-db.collection('Vocab').doc()
+// db.collection('users').doc();   DO I NEED THIS LINE?? WHAT FOR?? MORE TESTING NEEDED
+
+
+
+//adds new collection to current user 
+const saveBtn = document.querySelector('.btn');
+saveBtn.addEventListener('click', e => { //can i use submit
+    e.preventDefault(); 
+
+    auth.onAuthStateChanged((user) => {
+        if(user){
+            //return the users 'personal' information
+             db.collection('users').doc(user.uid).collection('personal').add({ //was using Vocab collection before
+                word: addVocabForm.add.value,
+                definition: addVocabForm.defined.value
+            });
+
+
+            addVocabForm.add.value = ''; //clear the search bar value
+            addVocabForm.defined.value = '';
+
+
+            console.log(user.uid);
+        } else {
+            console.log(user.uid);
+        }
+            
+    }); 
+        
+});
+
 
 
 
