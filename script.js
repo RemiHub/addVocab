@@ -59,6 +59,7 @@ function renderWords(doc){
 
 
     li.setAttribute('data-id', doc.id);
+    // console.log(li)
     word.textContent = doc.data().word.toUpperCase();
     definition.textContent = doc.data().definition;
 
@@ -102,21 +103,20 @@ function renderWords(doc){
     //delete word and desc when delete btn clicked
     bin.addEventListener('click', e => {
         e.stopPropagation();
-        //get the unique id from the db
+        //get the unique id of target attribute
         let id = e.target.parentElement.getAttribute('data-id');
-        console.log(id);
-        db.collection('personal').doc(id).delete();
-        console.log(id);
-        // var docRef = 
-        // docRef.doc(id);
+
+        auth.onAuthStateChanged(user => {
+
+            const ref = db.collection('users/').doc(user.uid).collection('personal/');
+            ref.doc(id).delete();
+
+        })
     })
-    // } else {
-    //     // alert('Login to view');
-    // }
 }
 
 
-//add onAuthStateChanged with unique user id - that collects the data in the users db?
+
 //does render words need to be in new function?
 //where else does collection happen that takes from Vocab db?
 
@@ -129,36 +129,36 @@ auth.onAuthStateChanged(user => {
     if (user){
         db.collection('users').doc(user.uid).collection('personal').onSnapshot((snapshot) => { //grabs the data from the database
             snapshot.docs.forEach(doc =>{
-                // console.log(doc);
+
+                // console.log(doc.data(), 'hello');
+
+                // if(doc.data() === ''){
+                //     addVocabForm.innerHTML = `
+                //  <span id="no-words"><strong>No current words available
+                //  </strong></span>`;
+                // }
+                
                 renderWords(doc);
                 setupUI(user);
+               
+
+                
 
             });
         }, (error) => {
-            // unsub();
             setupUI();
             console.log('Permission error, you must be logged in, please check your username and password and try again.' + error);
         });
         
     } else {
-        // unsub();
-
         setupUI();
         console.log('user is logged out');
         changeLogoutToLogin();
-
         //renderWords([]); // causing error but works without?
     }
 });
 
-// const unsub = db.collection('Vocab').onSnapshot(function(querySnapshot){
-//     console.log(querySnapshot);
-// });
 
-// // ...
-
-// // Stop listening for changes
-// unsub();
 
 
 const loggedOutBtn = document.querySelector('#logout-btn');
@@ -190,7 +190,6 @@ function changeLogoutToLogin(){
 
     
     changeBtn.addEventListener('click', e => {
-        // console.log(e)
         location.href = 'login.html'; //link back to login page
      });
 
@@ -209,15 +208,6 @@ function changeLogoutToLogin(){
 
 
 
-// db.collection('Vocab').get().then((snapshot) => {
-//     snapshot.docs.forEach(doc =>{
-//         renderWords(doc);
-//         //grabs the data from the database
-//     })
-// });     !!!!!!grabs the data
-
-
-
 //disable button until both input fields are filled out
 let button = document.querySelector('.btn');
 let input = document.querySelector('.input');
@@ -229,13 +219,14 @@ input2.addEventListener('change', stateHandle);
 input.addEventListener("change", stateHandle);
 
 
-//toggle button availability
+
+//toggle save button availability
 function stateHandle() {
     if (document.querySelector('.input').value === "" ) {
 
         button.disabled = true; //button remains disabled
     
-    } else if(document.querySelector('.input2').value === "") {
+    } else if(document.querySelector('.input2').value.length < 1) {
         button.disabled = true;
 
     } else {
@@ -255,8 +246,6 @@ addVocabForm.addEventListener('submit', e => {
         word: addVocabForm.add.value,
         definition: addVocabForm.defined.value
     });
-    
-  
     addVocabForm.add.value = ''; //clear the search bar value
     addVocabForm.defined.value = '';
 });
@@ -295,58 +284,71 @@ saveBtn.addEventListener('click', e => { //can i use submit
 
 
 
-
 //submit word in local storage - not needed
-function submitStorage(){
-//event listener on submit of input from user
-addForm.addEventListener('submit', e => {
-    e.preventDefault();
-    const todo = addForm.add.value.trim();
-    //addForm.add is refering to the 'name' of the input tag on the html
-    if(todo.length){
-    generateTemplate(todo);
-    addForm.reset();
+
+// function submitStorage(){
+
+// //event listener on submit of input from user
+// addForm.addEventListener('submit', e => {
+//     e.preventDefault();
+//     const todo = addForm.add.value.trim();
+//     //addForm.add is refering to the 'name' of the input tag on the html
+//     if(todo.length){
+//     generateTemplate(todo);
+//     addForm.reset();
 
 
-    //set data in local storage
-    localStorage.setItem('todo', JSON.stringify(todo));
-    // console.log(todo);
-    // console.log(localStorage)
+//     //set data in local storage
+//     localStorage.setItem('todo', JSON.stringify(todo));
+//     // console.log(todo);
+//     // console.log(localStorage)
 
-    //set new array for data to output
-    let data;
+//     //set new array for data to output
+//     let data;
 
-    if(localStorage.getItem('data') === null){
-        data = [];
-        // console.log(data)
-    } else {
-        data = JSON.parse(localStorage.getItem('data'))
-        //gets whatever is in local storage
-    }
-        //push the data onto the todo list
-        data.push(todo);
-        localStorage.setItem('data', JSON.stringify(data));
-    }
-});
-}
+//     if(localStorage.getItem('data') === null){
+//         data = [];
+//         // console.log(data)
+//     } else {
+//         data = JSON.parse(localStorage.getItem('data'))
+//         //gets whatever is in local storage
+//     }
+//         //push the data onto the todo list
+//         data.push(todo);
+//         localStorage.setItem('data', JSON.stringify(data));
+//     }
+// });
+// }
 
-submitStorage();
+// submitStorage();
+
 
 
 //if database is empty set error message 
 function checkDatabaseEmpty(){
-    
-db.collection('Vocab').get().then((snapshot) => {
-    snapshot.docs.forEach(doc =>{
-        // console.log(doc.data())
-        if(doc.data() === ''){
-            list.innerHTML = `
-         <span id="no-words"><strong>No current words available
-         </strong></span>`;
-            // console.log(doc.data());
-        }
-    })
+
+const empty = document.querySelector('.empty-words');
+
+auth.onAuthStateChanged(user => {
+db.collection('users').doc(user.uid).get().then( doc=> {
+    if(doc.exists){
+        db.collection('users').doc(user.uid).collection('personal').get().then( sub=> {
+            if(sub.docs.length > 0) {
+                // console.log('subcollection exists');
+                // setupUI(user);
+            } else{
+                // console.log('does not exist add new paragraph');
+                empty.innerHTML = `
+                    <label id="no-words"><strong>No words are currently saved, 
+                    type in a word and definition then click the save button to add a new word
+                    </strong></label>`;
+            }
+        })
+    }
 })
+
+})
+
 }
 
 checkDatabaseEmpty();
@@ -383,32 +385,33 @@ checkDatabaseEmpty();
 // getLocalStorage();
 
 
-function removeStorage(){
-//check local storage and remove when clicked
-list.addEventListener('click', e => {
-    // let newArr;
-    // localStorage.setItem('data', JSON.stringify('newArr'));
+
+// function removeStorage(){
+// //check local storage and remove when clicked
+// list.addEventListener('click', e => {
+//     // let newArr;
+//     // localStorage.setItem('data', JSON.stringify('newArr'));
     
 
-    let arr = JSON.parse(localStorage.getItem('data'));
-    if(e.target.classList.contains('delete')){
-        arr.forEach(function(arr){
-            if(arr == e.target.parentElement.textContent.trim()){
-            console.log(arr);
-            // console.log(e.target.parentElement.textContent.trim())
-            let indexToRemove = 1;
-            arr.slice(indexToRemove, 1)
+//     let arr = JSON.parse(localStorage.getItem('data'));
+//     if(e.target.classList.contains('delete')){
+//         arr.forEach(function(arr){
+//             if(arr == e.target.parentElement.textContent.trim()){
+//             console.log(arr);
+//             // console.log(e.target.parentElement.textContent.trim())
+//             let indexToRemove = 1;
+//             arr.slice(indexToRemove, 1)
             
-            // localStorage.setItem('newArr', JSON.stringify(arr));
-            }
-        })
+//             // localStorage.setItem('newArr', JSON.stringify(arr));
+//             }
+//         })
 
-    }
-})
+//     }
+// })
 
-}
+// }
 
-removeStorage()
+// removeStorage()
 
 
 
@@ -460,8 +463,6 @@ search.addEventListener('keyup', () => {
     filterTodos(term);
 });
 
-
-//if there is a duplicate then dont submit OR allow duplicates?
 
 
 //logout button

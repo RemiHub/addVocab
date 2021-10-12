@@ -17,7 +17,7 @@ registerForm.addEventListener("submit", (e) => {
     })
   }).then(() => {
     //NEED TO SEND EMAIL AND WINDOW ALERT TO SAY SUCCESSFUL!!
-    window.alert('You have successfully signed in!'); 
+    window.alert('You have successfully registered.'); 
     // console.log(names);
     location.href = 'login.html'; //user submits and successfully transfers to login page
   }).catch(signupError => {

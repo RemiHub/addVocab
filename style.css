@@ -60,6 +60,7 @@ body{
   #no-words{
       color: rgb(139, 11, 36);
       text-align: center;
+      font-size: 20px;
   }
 
   textarea{
