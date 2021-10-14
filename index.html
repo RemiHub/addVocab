@@ -7,11 +7,19 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/fb4baa8aa4.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="/images/dark_logo_transparent_background.png"/>
+<!-- <link rel="icon" type="image/png" href="https://example.com/favicon.png"/> 
+
+
+-->
 </head>
 <body>
 
     <div class="container">
         <!-- <a href="login.html"></a> -->
+        <div class="logo-img">
+            <img src="images/dark_logo_transparent_background.png" alt="logo" />
+        </div>
 
         <header class="text-center text-light my-4">
           <h1 class="mb-4">Word List and Meanings</h1>
@@ -24,9 +32,9 @@
           <form class="add text-center my-4" id="add-form">
 
             <label id="logged-in" class="text-light">Add a new word...</label>
-            <input id="logged-in" class="form-control m-auto input" type="text" name="add" placeholder="Write new word" required/>
+            <input id="logged-in" class="form-control m-auto input" type="text" name="add" placeholder="Write new word" required autocomplete="off"/>
             <label id="logged-in" class="text-light">Add the definition...</label>
-            <input id="logged-in" class="form-control m-auto input2" type="text" name="defined" placeholder="Definition of word here..." required/>
+            <input id="logged-in" class="form-control m-auto input2" type="text" name="defined" placeholder="Definition of word here..." required autocomplete="off"/>
             <button id="logged-in" class="btn btn-primary btn-lg btn-block" name="save-word-btn">Save new word and definition</button>
   
           </form>

@@ -10,20 +10,25 @@ registerForm.addEventListener("submit", (e) => {
   const password = registerForm["reg-password"].value;
 
 
+
   //sign up/register the user
   auth.createUserWithEmailAndPassword(email, password).then((cred) => {
     return db.collection('users').doc(cred.user.uid).set({
       names: firstName //registerForm['firstname'].value
     })
   }).then(() => {
-    //NEED TO SEND EMAIL AND WINDOW ALERT TO SAY SUCCESSFUL!!
+    sendVerificationEmail();
+
     window.alert('You have successfully registered.'); 
-    // console.log(names);
     location.href = 'login.html'; //user submits and successfully transfers to login page
+   
   }).catch(signupError => {
     window.alert(signupError); //alert error e.g typical error = if user is already registered
   })
 });
+
+
+
 
 
 //login form
@@ -34,6 +39,7 @@ loginForm.addEventListener("submit", (e) => {
   const password = loginForm["login-password"].value;
 
   auth.signInWithEmailAndPassword(email, password).then((cred) => {
+    
     // console.log(cred);
   }).catch(error => {
     var errorCode = error.code;
@@ -52,12 +58,50 @@ loginPageChange.addEventListener("click", (e) => {
     if (user) {
 
       location.href = "index.html";
-      console.log(user, "now logged in");
+      // console.log(user, "now logged in");
     } else {
-      console.log("Sorry you are an unknown user, please register!");
+      // console.log("Sorry you are an unknown user, please register!");
+      window.alert("Error: Sorry you are an unknown user, please register!")
     }
   });
 });
+
+
+//send verification email to current users email address
+//used within createEmailAnd... function
+function sendVerificationEmail(){
+auth.onAuthStateChanged(user => {
+  if(user){
+      firebase.auth().currentUser.sendEmailVerification()
+      .then(() => {
+      console.log('email sent')
+      }).catch(err => {
+        console.log(err);
+      })
+  } else {
+    window.alert('Registration unsuccesful, please try again!');
+  }
+
+})
+
+}
+
+
+// function sendVerificationEmail(){
+//    var user = firebase.auth().currentUser;
+
+//    user.sendEmailVerification().then(() => {
+//      console.log('Email sent');
+//    }).catch((error) => {
+//     console.log(error);
+//    })
+ 
+
+// }
+
+// sendVerificationEmail();
+
+
 
 
 

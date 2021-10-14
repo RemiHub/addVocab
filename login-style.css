@@ -80,7 +80,27 @@ body{
 
      #second{display:none;}
 
-     
+        .logo-img{
+        width: 100%;
+        max-width: 350px;
+        height: auto;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 50%;
+     }
+
+     img {
+      max-width: 100%;
+      height: auto;
+    }
+
+      /* .logo{
+        background-image: url("/images/dark_logo_transparent_background.png");
+        width: 10px;
+        height: 10px;
+    } */
+
 
 
 

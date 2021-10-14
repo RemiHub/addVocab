@@ -31,7 +31,8 @@ const loggedInForm = document.querySelectorAll('#logged-in');
 const setupUI = (user) =>{
     if (user){
         //account info
-        const userDetails = `<div>Logged in as ${user.email}, welcome!</div>`;
+        console.log(user)
+        const userDetails = `<div>Logged in as ${user.email}, welcome!</div>`; //check name to deploy instead of email
         accDetails.innerHTML = userDetails; //log email to new div
         loggedInForm.forEach(item => item.style.display = 'block'); 
         
@@ -100,17 +101,15 @@ function renderWords(doc){
     
     vocabList.appendChild(li);
 
-    //delete word and desc when delete btn clicked
+    //delete word and description when delete btn clicked
     bin.addEventListener('click', e => {
         e.stopPropagation();
         //get the unique id of target attribute
         let id = e.target.parentElement.getAttribute('data-id');
 
         auth.onAuthStateChanged(user => {
-
             const ref = db.collection('users/').doc(user.uid).collection('personal/');
             ref.doc(id).delete();
-
         })
     })
 }
@@ -129,33 +128,21 @@ auth.onAuthStateChanged(user => {
     if (user){
         db.collection('users').doc(user.uid).collection('personal').onSnapshot((snapshot) => { //grabs the data from the database
             snapshot.docs.forEach(doc =>{
-
-                // console.log(doc.data(), 'hello');
-
-                // if(doc.data() === ''){
-                //     addVocabForm.innerHTML = `
-                //  <span id="no-words"><strong>No current words available
-                //  </strong></span>`;
-                // }
-                
                 renderWords(doc);
                 setupUI(user);
-               
-
-                
-
-            });
-        }, (error) => {
-            setupUI();
-            console.log('Permission error, you must be logged in, please check your username and password and try again.' + error);
-        });
-        
-    } else {
-        setupUI();
-        console.log('user is logged out');
-        changeLogoutToLogin();
-        //renderWords([]); // causing error but works without?
-    }
+                        });
+                    }, (error) => {
+                        setupUI();
+                        // console.log('Permission error, you must be logged in, please check your username and password and try again.' + error);
+                        window.alert("Permission error: " + error)
+                    });
+                        } else {
+                            setupUI();
+                            console.log('user is logged out');
+                            // window.alert()
+                            changeLogoutToLogin();
+                            //renderWords([]); // causing error but works without?
+                        }
 });
 
 
@@ -332,7 +319,7 @@ const empty = document.querySelector('.empty-words');
 auth.onAuthStateChanged(user => {
 db.collection('users').doc(user.uid).get().then( doc=> {
     if(doc.exists){
-        db.collection('users').doc(user.uid).collection('personal').get().then( sub=> {
+        db.collection('users').doc(user.uid).collection('personal').get().then( sub=> { //add limit(1)?? look into
             if(sub.docs.length > 0) {
                 // console.log('subcollection exists');
                 // setupUI(user);
@@ -474,3 +461,5 @@ logout.addEventListener('click', e => {
     //     console.log('User has logged out');
     // })
 });
+
+
